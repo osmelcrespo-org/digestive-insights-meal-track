@@ -25,6 +25,18 @@ jobs:
           mkdir -p ~/.m2
           cat <<EOF > ~/.m2/settings.xml
           <settings>
+            <profiles>
+              <profile>
+                <id>manual</id>
+                <repositories>
+                  <repository>
+                    <id>maven</id>
+                    <name>maven</name>
+                    <url>https://nexus.ocrespo.com/repository/maven</url>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
             <servers>
               <server>
                 <id>nexus</id>
@@ -32,6 +44,9 @@ jobs:
                 <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
             </servers>
+            <activeProfiles>
+              <activeProfile>manual</activeProfile>
+            </activeProfiles>
           </settings>
           EOF
 
