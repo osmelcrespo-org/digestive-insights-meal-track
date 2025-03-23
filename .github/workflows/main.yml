@@ -39,7 +39,7 @@ jobs:
             </profiles>
             <servers>
               <server>
-                <id>nexus</id>
+                <id>maven</id>
                 <username>${{ secrets.NEXUS_USERNAME }}</username>
                 <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
