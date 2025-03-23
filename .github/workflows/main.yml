@@ -18,8 +18,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
       - name: Create Maven Settings
         run: |
           mkdir -p ~/.m2
@@ -34,6 +32,8 @@ jobs:
             </servers>
           </settings>
           EOF
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
       - name: Upload Artifact to Nexus
         env:
