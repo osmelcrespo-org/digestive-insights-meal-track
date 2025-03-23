@@ -53,6 +53,7 @@ jobs:
 
       - name: Update .m2
         run: |
+          rm -f ~/.m2/settings.xml
           cat <<EOF > ~/.m2/settings.xml
           <settings>
             <servers>
