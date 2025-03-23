@@ -53,8 +53,7 @@ jobs:
 
       - name: Update .m2 for Nexus Deployment
         run: |
-          rm -f ~/.m2/settings.xml
-          cat > ~/.m2/settings.xml <<EOF
+          cat > ~/.m2/settings-deploy.xml <<EOF
           <settings>
             <servers>
               <server>
@@ -96,12 +95,13 @@ jobs:
             -Dfile=$JAR_FILE \
             -DrepositoryId=nexus \
             -Durl=$NEXUS_URL
+            -s ~/.m2/settings-deploy.xml
 
       - name: Build Docker image
-        run: docker build -t crm-accounts:${{ env.version }} .
+        run: docker build -t meal-track:${{ env.version }} .
       - name: Log in to Nexus Docker registry
         run: echo ${{ secrets.NEXUS_PASSWORD }} | docker login -u ${{ secrets.NEXUS_USERNAME }} --password-stdin nexus.ocrespo.com
       - name: Tag Docker image
-        run: docker tag crm-accounts:${{ env.version }} nexus.ocrespo.com/docker/crm-accounts:${{ env.version }}
+        run: docker tag meal-track:${{ env.version }} nexus.ocrespo.com/docker/meal-track:${{ env.version }}
       - name: Push Docker image
-        run: docker push nexus.ocrespo.com/docker/crm-accounts:${{ env.version }}
+        run: docker push nexus.ocrespo.com/docker/meal-track:${{ env.version }}
