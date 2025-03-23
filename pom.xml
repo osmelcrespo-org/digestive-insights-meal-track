@@ -9,6 +9,13 @@
 		<relativePath/>
 	</parent>
 
+	<repositories>
+		<repository>
+			<id>ocrespo-repo</id>
+			<url>https://nexus.ocrespo.com/repository/maven</url>
+		</repository>
+	</repositories>
+
 	<groupId>com.ocrespo.di</groupId>
 	<artifactId>meal-track</artifactId>
 	<version>${dynamic}</version>
