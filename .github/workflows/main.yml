@@ -23,6 +23,38 @@ jobs:
           mkdir -p ~/.m2
           cat <<EOF > ~/.m2/settings.xml
           <settings>
+            <profiles>
+              <profile>
+                <id>manual</id>
+                <repositories>
+                  <repository>
+                    <id>maven</id>
+                    <name>maven</name>
+                    <url>https://nexus.ocrespo.com/repository/maven/</url>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
+            <servers>
+            <server>
+              <id>maven</id>
+              <username>${{ secrets.NEXUS_USERNAME }}</username>
+              <password>${{ secrets.NEXUS_PASSWORD }}</password>
+              </server>
+            </servers>        
+            <activeProfiles>
+            <activeProfile>manual</activeProfile>
+            </activeProfiles>
+          </settings>
+          EOF
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Update .m2
+        run: |
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
             <servers>
               <server>
                 <id>maven</id>
@@ -31,9 +63,7 @@ jobs:
               </server>
             </servers>
           </settings>
-          EOF
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+          EOF          
 
       - name: Upload Artifact to Nexus
         env:
