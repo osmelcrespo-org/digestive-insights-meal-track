@@ -66,14 +66,7 @@ jobs:
           echo "Deploying JAR file: $JAR_FILE to Nexus..."
           
           # Step 3: Deploy the JAR file to Nexus
-          mvn deploy:deploy-file \
-            -DgroupId=com.ocrespo.di \
-            -DartifactId=meal-track \
-            -Dversion=$VERSION \
-            -Dpackaging=jar \
-            -Dfile=$JAR_FILE \
-            -DrepositoryId=nexus
-            -s ~/.m2/settings-deploy.xml
+          mvn deploy
 
       - name: Build Docker image
         run: docker build -t meal-track:${{ env.version }} .
