@@ -23,53 +23,32 @@ jobs:
           mkdir -p ~/.m2
           cat <<EOF > ~/.m2/settings.xml
           <settings>
-            <profiles>
-              <profile>
-                <id>manual</id>
-                <repositories>
-                  <repository>
-                    <id>maven</id>
-                    <name>maven</name>
-                    <url>https://nexus.ocrespo.com/repository/maven/</url>
-                  </repository>
-                </repositories>
-              </profile>
-            </profiles>
             <servers>
-            <server>
-              <id>maven</id>
-              <username>${{ secrets.NEXUS_USERNAME }}</username>
-              <password>${{ secrets.NEXUS_PASSWORD }}</password>
+              <server>
+                <id>nexus</id>
+                <username>${{ secrets.NEXUS_USERNAME }}</username>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
-            </servers>        
-            <activeProfiles>
-            <activeProfile>manual</activeProfile>
-            </activeProfiles>
+            </servers>
+          
+            <mirrors>
+              <mirror>
+                <id>nexus</id>
+                <name>My Nexus Repository</name>
+                <url>https://nexus.ocrespo.com/repository/maven-public/</url>
+                <mirrorOf>*</mirrorOf>
+              </mirror>
+            </mirrors>
           </settings>
           EOF
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Update .m2 for Nexus Deployment
-        run: |
-          cat > ~/.m2/settings-deploy.xml <<EOF
-          <settings>
-            <servers>
-              <server>
-                <id>maven</id>
-                <username>${{ secrets.NEXUS_USERNAME }}</username>
-                <password>${{ secrets.NEXUS_PASSWORD }}</password>
-              </server>
-            </servers>
-          </settings>
-          EOF        
-
       - name: Upload Artifact to Nexus
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-          NEXUS_URL: 'https://nexus.ocrespo.com/repository/maven/'
         run: |
           # Step 1: Extract the full version from version.properties
           VERSION=$(grep "maven_version" target/classes/version.properties | cut -d'=' -f2 | tr -d '\r')
@@ -93,8 +72,7 @@ jobs:
             -Dversion=$VERSION \
             -Dpackaging=jar \
             -Dfile=$JAR_FILE \
-            -DrepositoryId=nexus \
-            -Durl=$NEXUS_URL
+            -DrepositoryId=nexus
             -s ~/.m2/settings-deploy.xml
 
       - name: Build Docker image

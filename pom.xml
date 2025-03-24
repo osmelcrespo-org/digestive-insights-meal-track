@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.ocrespo</groupId>
 		<artifactId>spring-parent</artifactId>
-		<version>1.1.0-20250323.230835</version>
+		<version>1.1.0-20250324.011400</version>
 		<relativePath/>
 	</parent>
 
@@ -98,12 +98,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>nexus</id>
-			<url>https://nexus.ocrespo.com/repository/maven/</url>
-		</repository>
-	</distributionManagement>
 
 </project>
